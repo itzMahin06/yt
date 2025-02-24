@@ -7,35 +7,33 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Mahmudul Islam Mahin</h1>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-    </header>
 
-    <main>
-        <section class="category">
-            <h2>Category 1</h2>
-            <div class="video-grid">
-                <iframe src="https://www.youtube.com/embed/uawquI4pOXw" allowfullscreen></iframe>
-                <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID2" allowfullscreen></iframe>
-            </div>
-        </section>
+    <h1>Mahmudul Islam Mahin All Class List</h1>
+    
+    <div class="video-container">
+        <div class="video-card" data-video="1">
+            <div class="share-options"></div>
+            <img id="thumb-1" src="" alt="Video Thumbnail">
+            <button class="share-btn">Share</button>
+        </div>
+        <div class="video-card" data-video="2">
+            <div class="share-options"></div>
+            <img id="thumb-2" src="" alt="Video Thumbnail">
+            <button class="share-btn">Share</button>
+        </div>
+    </div>
 
-        <section class="category">
-            <h2>Category 2</h2>
-            <div class="video-grid">
-                <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID3" allowfullscreen></iframe>
-                <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID4" allowfullscreen></iframe>
-            </div>
-        </section>
-    </main>
+    <!-- Popup Modal -->
+    <div class="modal" id="videoModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <iframe id="videoFrame" src="" allowfullscreen></iframe>
+        </div>
+    </div>
 
-    <footer>
-        <p>© 2025 Mahmudul Islam Mahin</p>
-    </footer>
+    <!-- Notification -->
+    <div class="notification" id="notification">Successfully Shared!</div>
+
+    <script src="script.js"></script>
 </body>
 </html>
