@@ -210,3 +210,32 @@ h1 { margin-bottom: 20px; font-size: 2rem; }
     border-radius: 5px;
     font-size: 14px;
 }
+.info-box {
+    background: #222;
+    padding: 15px;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-item i {
+    font-size: 18px;
+    color: #ff0000;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .info-box {
+        font-size: 13px;
+    }
+}
