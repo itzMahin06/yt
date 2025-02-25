@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahin's ClassRoom</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h1>Mahin's ClassRoom</h1>
+    <div class="channel-info">
+    <img src="profile.jpg" alt="Profile Picture" class="channel-logo">
+    <div class="channel-details">
+        <div class="channel-name">
+            Mahmudul Islam Mahin <span class="verified-badge">✔</span>
+        </div>
+        <div class="channel-username">@itzMahin</div>
+        <div class="subscriber-count">65 subscribers • 3 videos</div>
+               <a href="https://www.youtube.com/@itzmahin?sub_confirmation=1"> <button class="subscribe-btn">Subscribe</button> </a>
+    </div>
+</div>
+    <br> 
+    <div class="video-container">
+        <div class="video-card" data-video="1">
+           <div class="viewer-counter">Views: 6.2K </div>
+            <div class="share-options"></div>
+            <img id="thumb-1" src="" alt="Video Thumbnail">
+            <button class="share-btn">Share</button>
+        </div>
+        <div class="video-card" data-video="2">
+            <div class="viewer-counter">Views: 6.1K </div>
+            <div class="share-options"></div>
+            <img id="thumb-2" src="" alt="Video Thumbnail">
+            <button class="share-btn">Share</button>
+        </div>
+      <div class="video-card" data-video="3">
+            <div class="viewer-counter">Views: 7.4K </div>
+            <div class="share-options"></div>
+            <img id="thumb-3" src="" alt="Video Thumbnail">
+            <button class="share-btn">Share</button>
+        </div>
+      <div class="video-card" data-video="4">
+            <div class="viewer-counter">Views: 1.9K </div>
+            <div class="share-options"></div>
+            <img id="thumb-4" src="" alt="Video Thumbnail">
+            <button class="share-btn">Share</button>
+        </div>
+      <div class="video-card" data-video="5">
+            <div class="viewer-counter">Views: 2.4K </div>
+            <div class="share-options"></div>
+            <img id="thumb-5" src="" alt="Video Thumbnail">
+            <button class="share-btn">Share</button>
+        </div>
+    </div>
+
+    <!-- Popup Modal -->
+    <div class="modal" id="videoModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <iframe id="videoFrame" src="" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">Successfully Shared!</div>
+
+    <script>
+      const videoList = {
+    1: "1RWv1gIcZ34",
+    2: "1O7E10cpfGs",
+    3: "kZvnz4h1cOc",
+    4: "p1GqmBy0zRQ",
+    5: "TajfVNdJimE"    
+};
+
+document.querySelectorAll(".video-card").forEach(card => {
+    const videoNum = card.getAttribute("data-video");
+    const videoId = videoList[videoNum];
+
+    if (videoId) {
+        document.getElementById(`thumb-${videoNum}`).src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
+        card.addEventListener("click", function (event) {
+            if (!event.target.classList.contains("share-btn")) {
+                openVideo(videoId);
+            }
+        });
+
+        const shareBtn = card.querySelector(".share-btn");
+        const shareOptions = card.querySelector(".share-options");
+
+        shareOptions.innerHTML = `
+            <button onclick="shareVideo('facebook', '${videoId}')">Facebook</button>
+            <button onclick="shareVideo('messenger', '${videoId}')">Messenger</button>
+            <button onclick="shareVideo('whatsapp', '${videoId}')">WhatsApp</button>
+            <button onclick="copyLink('${videoId}')">Copy Link</button>
+        `;
+
+        shareBtn.addEventListener("click", function (event) {
+            event.stopPropagation();
+            shareOptions.style.display = (shareOptions.style.display === "block") ? "none" : "block";
+        });
+
+        document.addEventListener("click", function (e) {
+            if (!shareBtn.contains(e.target) && !shareOptions.contains(e.target)) {
+                shareOptions.style.display = "none";
+            }
+        });
+    }
+});
+
+function openVideo(videoId) {
+    document.getElementById("videoModal").classList.add("active");
+    document.getElementById("videoFrame").src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+}
+
+function closeModal() {
+    document.getElementById("videoModal").classList.remove("active");
+    document.getElementById("videoFrame").src = "";
+}
+
+function shareVideo(platform, videoId) {
+    const url = `https://www.youtube.com/watch?v=${videoId}`;
+    let shareUrl = "";
+
+    switch (platform) {
+        case "facebook": shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`; break;
+        case "messenger": shareUrl = `https://www.messenger.com/t/?link=${url}`; break;
+        case "whatsapp": shareUrl = `https://wa.me/?text=${url}`; break;
+    }
+
+    window.open(shareUrl, "_blank");
+    showNotification();
+}
+
+function copyLink(videoId) {
+    navigator.clipboard.writeText(`https://www.youtube.com/watch?v=${videoId}`);
+    showNotification();
+}
+
+function showNotification() {
+    document.getElementById("notification").style.display = "block";
+    setTimeout(() => { document.getElementById("notification").style.display = "none"; }, 2000);
+}
+    </script>
+</body>
+</html>
