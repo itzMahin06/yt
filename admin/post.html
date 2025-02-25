@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #222;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .generator-container {
+            background: #333;
+            padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            background: #444;
+            color: white;
+        }
+
+        button {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #cc0000;
+        }
+
+        textarea {
+            width: 90%;
+            height: 100px;
+            background: #111;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            resize: none;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+</head>
+<body>
+
+    <!-- YouTube Video Card Generator -->
+    <div class="generator-container">
+        <h2>YouTube Video Card Generator</h2>
+        <div id="videoInputs">
+            <!-- 10 input fields for YouTube links -->
+            <input type="text" class="video-link" placeholder="YouTube Video Link 1">
+            <input type="text" class="video-link" placeholder="YouTube Video Link 2">
+            <input type="text" class="video-link" placeholder="YouTube Video Link 3">
+            <input type="text" class="video-link" placeholder="YouTube Video Link 4">
+            <input type="text" class="video-link" placeholder="YouTube Video Link 5">
+            <input type="text" class="video-link" placeholder="YouTube Video Link 6">
+            <input type="text" class="video-link" placeholder="YouTube Video Link 7">
+            <input type="text" class="video-link" placeholder="YouTube Video Link 8">
+            <input type="text" class="video-link" placeholder="YouTube Video Link 9">
+            <input type="text" class="video-link" placeholder="YouTube Video Link 10">
+        </div>
+        <button onclick="generateVideoCards()">Generate</button>
+        <button onclick="copyVideoCode()">Copy</button>
+        <textarea id="generatedVideoCode" readonly></textarea>
+    </div>
+
+    <script>
+        let videoCounter = 1;
+        let videoList = {};
+
+        function generateVideoCards() {
+            let videoInputs = document.querySelectorAll(".video-link");
+            let videoHTML = "";
+            let videoScript = "const videoList = {\n";
+            videoList = {}; // Reset video list
+
+            videoInputs.forEach((input, index) => {
+                let videoLink = input.value.trim();
+                if (videoLink !== "") {
+                    let videoID = extractVideoID(videoLink);
+                    if (videoID) {
+                        let videoNumber = videoCounter++;
+                        videoList[videoNumber] = videoID;
+
+                        videoHTML += `<div class="video-card" data-video="${videoNumber}">
+    <div class="viewer-counter">Views: 0</div>
+    <div class="share-options"></div>
+    <img id="thumb-${videoNumber}" src="https://img.youtube.com/vi/${videoID}/hqdefault.jpg" alt="Video Thumbnail">
+    <button class="share-btn">Share</button>
+</div>\n`;
+
+                        videoScript += `    ${videoNumber}: "${videoID}",\n`;
+                    }
+                }
+            });
+
+            videoScript += "};"; // Close the script object properly
+
+            // Fix: Encode  to prevent premature closure
+            let fullCode = `${videoHTML}\n\n&lt;script&gt;\n${videoScript}\n&lt;/script&gt;`;
+
+            document.getElementById("generatedVideoCode").value = fullCode;
+        }
+
+        function copyVideoCode() {
+            let code = document.getElementById("generatedVideoCode");
+            code.select();
+            document.execCommand("copy");
+            alert("Video Card Code Copied!");
+        }
+
+        function extractVideoID(url) {
+            let match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+            return match ? match[1] : null;
+        }
+    </script>
+</body>
+</html>
