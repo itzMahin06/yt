@@ -48,17 +48,15 @@ document.querySelectorAll(".video-card").forEach(card => {
     }
 });
 
-// Function to Open Video in Video.js Player
+// Function to Open Video in Plyr
 function openVideo(videoId) {
     const modal = document.getElementById("videoModal");
     modal.classList.add("active");
 
-    const player = videojs("videoPlayer", {
-        techOrder: ["youtube"],
-        sources: [{ type: "video/youtube", src: `https://www.youtube.com/watch?v=${videoId}` }]
-    });
+    const iframe = document.querySelector("#player iframe");
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
 
-    player.play();
+    new Plyr("#player", { controls: ["play", "progress", "mute", "volume", "fullscreen"] });
 }
 
 // Close Modal & Stop Video
@@ -66,9 +64,8 @@ function closeModal() {
     const modal = document.getElementById("videoModal");
     modal.classList.remove("active");
 
-    const player = videojs("videoPlayer");
-    player.pause();
-    player.src("");  // Reset player source
+    const iframe = document.querySelector("#player iframe");
+    iframe.src = ""; // Stop the video
 }
 
 // Function to Increment View Count in Firebase
