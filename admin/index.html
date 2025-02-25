@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Tool</title>
+    <style>
+      body {
+    font-family: Arial, sans-serif;
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.generator-container {
+    background: #333;
+    padding: 20px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+}
+
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background: #444;
+    color: white;
+}
+
+button {
+    background: #ff0000;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #cc0000;
+}
+
+textarea {
+    width: 90%;
+    height: 100px;
+    background: #111;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    resize: none;
+}
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+</head>
+<body>
+
+    <!-- Class Information Generator -->
+    <div class="generator-container">
+        <h2>Class Information Generator</h2>
+        <input type="text" id="playlist" placeholder="Playlist Name">
+        <input type="text" id="subject" placeholder="Subject Name">
+        <input type="text" id="chapter" placeholder="Chapter Name">
+        <input type="text" id="topic" placeholder="Topic Name">
+        <input type="text" id="totalVideos" placeholder="Total Videos">
+        <input type="text" id="totalDuration" placeholder="Total Video Duration">
+        <button onclick="generateInfoBox()">Generate</button>
+        <button onclick="copyInfoCode()">Copy</button>
+        <textarea id="generatedInfoCode" readonly></textarea>
+    </div>
+
+    <!-- YouTube Video Card Generator -->
+    <div class="generator-container">
+        <h2>YouTube Video Card Generator</h2>
+        <input type="text" id="videoLink" placeholder="YouTube Video Link">
+        <button onclick="generateVideoCard()">Generate</button>
+        <button onclick="copyVideoCode()">Copy</button>
+        <textarea id="generatedVideoCode" readonly></textarea>
+    </div>
+
+    <script>
+      let videoCounter = 1;
+let videoList = {};
+
+function generateInfoBox() {
+    let playlist = document.getElementById("playlist").value;
+    let subject = document.getElementById("subject").value;
+    let chapter = document.getElementById("chapter").value;
+    let topic = document.getElementById("topic").value;
+    let totalVideos = document.getElementById("totalVideos").value;
+    let totalDuration = document.getElementById("totalDuration").value;
+
+    let infoHTML = `
+    <div class="info-box">
+        <div class="info-item"><i class="fas fa-list"></i> Playlist: ${playlist}</div>
+        <div class="info-item"><i class="fas fa-book"></i> Subject: ${subject}</div>
+        <div class="info-item"><i class="fas fa-layer-group"></i> Chapter: ${chapter}</div>
+        <div class="info-item"><i class="fas fa-file-alt"></i> Topic: ${topic}</div>
+        <div class="info-item"><i class="fas fa-video"></i> Total Videos: ${totalVideos}</div>
+        <div class="info-item"><i class="fas fa-clock"></i> Total Duration: ${totalDuration}</div>
+    </div>`;
+
+    document.getElementById("generatedInfoCode").value = infoHTML;
+}
+
+function copyInfoCode() {
+    let code = document.getElementById("generatedInfoCode");
+    code.select();
+    document.execCommand("copy");
+    alert("Class Information Code Copied!");
+}
+
+function generateVideoCard() {
+    let videoLink = document.getElementById("videoLink").value;
+    let videoID = extractVideoID(videoLink);
+    if (!videoID) {
+        alert("Invalid YouTube link!");
+        return;
+    }
+
+    videoList[videoCounter] = videoID;
+
+    let videoHTML = `<div class="video-container" data-video="${videoCounter}"></div>`;
+    let videoScript = `const videoList = ${JSON.stringify(videoList, null, 4)};`;
+
+    document.getElementById("generatedVideoCode").value = videoHTML + "\n\n" + `<script>\n${videoScript}\n</script>`;
+    
+    videoCounter++;
+}
+
+function copyVideoCode() {
+    let code = document.getElementById("generatedVideoCode");
+    code.select();
+    document.execCommand("copy");
+    alert("Video Card Code Copied!");
+}
+
+function extractVideoID(url) {
+    let match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    return match ? match[1] : null;
+}
+    </script>
+</body>
+</html>
