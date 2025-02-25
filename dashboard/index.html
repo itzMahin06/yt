@@ -3,32 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Email Auth</title>
+    <title>Firebase Registration & Login</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        body { font-family: Arial, sans-serif; background: #121212; color: white; text-align: center; padding: 50px; }
+        .container { max-width: 400px; margin: auto; background: #1e1e1e; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
+        input, select, button { width: 90%; margin: 10px 0; padding: 10px; border: none; border-radius: 5px; }
+        input, select { background: #333; color: white; }
+        button { background: #ff4c4c; color: white; cursor: pointer; }
         .hidden { display: none; }
+        a { color: #ff4c4c; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div id="register-form">
+    <div id="register-form" class="container">
         <h2>Register</h2>
-        <input type="email" id="register-email" placeholder="Email" required><br><br>
-        <input type="password" id="register-password" placeholder="Password" required><br><br>
+        <input type="text" id="full-name" placeholder="Full Name" required><br>
+        <select id="hsc-batch" required>
+            <option value="" disabled selected>Select HSC Batch</option>
+            <option value="24">HSC 24</option>
+            <option value="25">HSC 25</option>
+            <option value="26">HSC 26</option>
+            <option value="27">HSC 27</option>
+        </select><br>
+        <input type="email" id="register-email" placeholder="Email" required><br>
+        <input type="password" id="register-password" placeholder="Password" required><br>
         <button onclick="register()">Register</button>
-        <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+        <p>Already have an account? <a onclick="showLogin()">Login</a></p>
     </div>
 
-    <div id="login-form" class="hidden">
+    <div id="login-form" class="container hidden">
         <h2>Login</h2>
-        <input type="email" id="login-email" placeholder="Email" required><br><br>
-        <input type="password" id="login-password" placeholder="Password" required><br><br>
+        <input type="email" id="login-email" placeholder="Email" required><br>
+        <input type="password" id="login-password" placeholder="Password" required><br>
         <button onclick="login()">Login</button>
-        <p>Don't have an account? <a href="#" onclick="showRegister()">Register</a></p>
+        <p>Don't have an account? <a onclick="showRegister()">Register</a></p>
     </div>
 
-    <div id="main-content" class="hidden">
-        <h2>Welcome, <span id="user-email"></span></h2>
+    <div id="main-content" class="container hidden">
+        <h2>Welcome, <span id="user-name"></span></h2>
+        <p>HSC Batch: <span id="user-batch"></span></p>
+        <p>Email: <span id="user-email"></span></p>
         <button onclick="logout()">Logout</button>
     </div>
 
@@ -47,15 +65,32 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        const db = firebase.firestore();
 
         // Register Function
         function register() {
+            const fullName = document.getElementById("full-name").value;
+            const batch = document.getElementById("hsc-batch").value;
             const email = document.getElementById("register-email").value;
             const password = document.getElementById("register-password").value;
-            
+
+            if (!batch) {
+                alert("Please select your HSC batch.");
+                return;
+            }
+
             auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    alert("Registration Successful!");
+                    const user = userCredential.user;
+                    return db.collection("users").doc(user.uid).set({
+                        fullName: fullName,
+                        batch: batch,
+                        email: email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
+                .then(() => {
+                    alert("Registration Successful! You can now log in.");
                     showLogin();
                 })
                 .catch((error) => {
@@ -96,13 +131,21 @@
             document.getElementById("login-form").classList.remove("hidden");
         }
 
-        // Check Authentication State
+        // Check Authentication State & Fetch User Data
         auth.onAuthStateChanged((user) => {
             if (user) {
-                document.getElementById("register-form").classList.add("hidden");
-                document.getElementById("login-form").classList.add("hidden");
-                document.getElementById("main-content").classList.remove("hidden");
-                document.getElementById("user-email").textContent = user.email;
+                db.collection("users").doc(user.uid).get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            document.getElementById("register-form").classList.add("hidden");
+                            document.getElementById("login-form").classList.add("hidden");
+                            document.getElementById("main-content").classList.remove("hidden");
+
+                            document.getElementById("user-name").textContent = doc.data().fullName;
+                            document.getElementById("user-batch").textContent = doc.data().batch;
+                            document.getElementById("user-email").textContent = doc.data().email;
+                        }
+                    });
             } else {
                 document.getElementById("register-form").classList.remove("hidden");
                 document.getElementById("main-content").classList.add("hidden");
