@@ -131,6 +131,71 @@ h1 { margin-bottom: 20px; font-size: 2rem; }
     display: none;
     animation: fadeInOut 3s ease-in-out;
 }
+.channel-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #181818; /* Dark Background */
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.channel-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.channel-details {
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+.channel-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.verified-badge {
+    color: #3498db; /* Blue Checkmark */
+    font-size: 16px;
+}
+
+.channel-username {
+    font-size: 14px;
+    color: #aaa;
+}
+
+.subscriber-count {
+    font-size: 14px;
+    color: #bbb;
+    margin: 5px 0;
+}
+
+.subscribe-btn {
+    background: #ff0000; /* YouTube Red */
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.subscribe-btn:hover {
+    background: #cc0000;
+    transform: scale(1.05);
+}
+
+.subscribe-btn:active {
+    background: #b30000;
+    transform: scale(0.95);
+}
 
 @keyframes fadeInOut {
     0%, 100% { opacity: 0; }
