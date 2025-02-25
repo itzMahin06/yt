@@ -18,24 +18,23 @@ const videoList = {
     2: "jdQl9bjYw0w"
 };
 
-// Load Thumbnails & Fetch Viewer Count
+// Load Videos & Fetch Viewer Count
 document.querySelectorAll(".video-card").forEach(card => {
     const videoNum = card.getAttribute("data-video");
     const videoId = videoList[videoNum];
 
     if (videoId) {
-        document.getElementById(`thumb-${videoNum}`).src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        document.getElementById(`video-${videoNum}`).src = `https://www.youtube.com/embed/${videoId}`;
 
         // Fetch View Count from Firebase
         db.ref(`video_views/${videoNum}`).on("value", snapshot => {
             document.getElementById(`view-count-${videoNum}`).innerText = snapshot.val() || 0;
         });
 
-        // Open Video Player
+        // Track View Count when Clicked
         card.addEventListener("click", function (event) {
             if (!event.target.classList.contains("share-btn")) {
                 incrementViewCount(videoNum);
-                openVideo(videoId);
             }
         });
 
@@ -47,26 +46,6 @@ document.querySelectorAll(".video-card").forEach(card => {
         });
     }
 });
-
-// Function to Open Video in Plyr
-function openVideo(videoId) {
-    const modal = document.getElementById("videoModal");
-    modal.classList.add("active");
-
-    const iframe = document.querySelector("#player iframe");
-    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-
-    new Plyr("#player", { controls: ["play", "progress", "mute", "volume", "fullscreen"] });
-}
-
-// Close Modal & Stop Video
-function closeModal() {
-    const modal = document.getElementById("videoModal");
-    modal.classList.remove("active");
-
-    const iframe = document.querySelector("#player iframe");
-    iframe.src = ""; // Stop the video
-}
 
 // Function to Increment View Count in Firebase
 function incrementViewCount(videoNum) {
