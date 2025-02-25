@@ -129,107 +129,11 @@ function copyInfoCode() {
     alert("Class Information Code Copied!");
 }
 
-let videoCounter = 1;
-        let videoList = {};
 
-        function generateVideoCards() {
-            let videoInputs = document.querySelectorAll(".video-link");
-            let videoHTML = "";
-            let videoScript = "const videoList = {\n";
-            videoList = {}; // Reset video list
-
-            videoInputs.forEach((input, index) => {
-                let videoLink = input.value.trim();
-                if (videoLink !== "") {
-                    let videoID = extractVideoID(videoLink);
-                    if (videoID) {
-                        let videoNumber = videoCounter++;
-                        videoList[videoNumber] = videoID;
-
-                        videoHTML += `<div class="video-card" data-video="${videoNumber}">
-    <div class="viewer-counter">Views: 0</div>
-    <div class="share-options"></div>
-    <img id="thumb-${videoNumber}" src="https://img.youtube.com/vi/${videoID}/hqdefault.jpg" alt="Video Thumbnail">
-    <button class="share-btn">Share</button>
-</div>\n`;
-
-                        videoScript += `    ${videoNumber}: "${videoID}",\n`;
-                    }
-                }
-            });
-
-            videoScript += "};"; // Close the script object properly
-
-            // Fix: Encode  to prevent premature closure
-            let fullCode = `${videoHTML}\n\n&lt;script&gt;\n${videoScript}\n&lt;/script&gt;`;
-
-            document.getElementById("generatedVideoCode").value = fullCode;
-        }
-
-        function copyVideoCode() {
-            let code = document.getElementById("generatedVideoCode");
-            code.select();
-            document.execCommand("copy");
-            alert("Video Card Code Copied!");
-        }
-
-        function extractVideoID(url) {
-            let match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
-            return match ? match[1] : null;
-        }
     </script>
 
 
-      <script>
-        let videoCounter = 1;
-        let videoList = {};
-
-        function generateVideoCards() {
-            let videoInputs = document.querySelectorAll(".video-link");
-            let videoHTML = "";
-            let videoScript = "const videoList = {\n";
-            videoList = {}; // Reset video list
-
-            videoInputs.forEach((input, index) => {
-                let videoLink = input.value.trim();
-                if (videoLink !== "") {
-                    let videoID = extractVideoID(videoLink);
-                    if (videoID) {
-                        let videoNumber = videoCounter++;
-                        videoList[videoNumber] = videoID;
-
-                        videoHTML += `<div class="video-card" data-video="${videoNumber}">
-    <div class="viewer-counter">Views: 0</div>
-    <div class="share-options"></div>
-    <img id="thumb-${videoNumber}" src="https://img.youtube.com/vi/${videoID}/hqdefault.jpg" alt="Video Thumbnail">
-    <button class="share-btn">Share</button>
-</div>\n`;
-
-                        videoScript += `    ${videoNumber}: "${videoID}",\n`;
-                    }
-                }
-            });
-
-            videoScript += "};"; // Close the script object properly
-
-            // Fix: Encode  to prevent premature closure
-            let fullCode = `${videoHTML}\n\n&lt;script&gt;\n${videoScript}\n&lt;/script&gt;`;
-
-            document.getElementById("generatedVideoCode").value = fullCode;
-        }
-
-        function copyVideoCode() {
-            let code = document.getElementById("generatedVideoCode");
-            code.select();
-            document.execCommand("copy");
-            alert("Video Card Code Copied!");
-        }
-
-        function extractVideoID(url) {
-            let match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
-            return match ? match[1] : null;
-        }
-</script>
+      
     
 </body>
 </html>
