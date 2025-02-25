@@ -1,9 +1,25 @@
+// Firebase Configuration
+const firebaseConfig = {
+    const firebaseConfig = {
+    apiKey: "AIzaSyD_-Utk2tXtvsFaSv1tFa-6YZi0d8nRWvA",
+    authDomain: "mahin-class.firebaseapp.com",
+    projectId: "mahin-class",
+    storageBucket: "mahin-class.firebasestorage.app",
+    messagingSenderId: "1044302797960",
+    appId: "1:1044302797960:web:3a39774ca5e890f827133d"
+  };
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// YouTube Video List (Unique Numbers)
 const videoList = {
     1: "uawquI4pOXw",
-    2: "jdQl9bjYw0w",
-    3: "s3qubsclpYM"
+    2: "jdQl9bjYw0w"
 };
 
+// Load Thumbnails & Fetch Viewer Count
 document.querySelectorAll(".video-card").forEach(card => {
     const videoNum = card.getAttribute("data-video");
     const videoId = videoList[videoNum];
@@ -11,65 +27,58 @@ document.querySelectorAll(".video-card").forEach(card => {
     if (videoId) {
         document.getElementById(`thumb-${videoNum}`).src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
+        // Fetch View Count from Firebase
+        db.ref(`video_views/${videoNum}`).on("value", snapshot => {
+            document.getElementById(`view-count-${videoNum}`).innerText = snapshot.val() || 0;
+        });
+
+        // Open Video Player
         card.addEventListener("click", function (event) {
             if (!event.target.classList.contains("share-btn")) {
+                incrementViewCount(videoNum);
                 openVideo(videoId);
             }
         });
 
+        // Share Button
         const shareBtn = card.querySelector(".share-btn");
-        const shareOptions = card.querySelector(".share-options");
-
-        shareOptions.innerHTML = `
-            <button onclick="shareVideo('facebook', '${videoId}')">Facebook</button>
-            <button onclick="shareVideo('messenger', '${videoId}')">Messenger</button>
-            <button onclick="shareVideo('whatsapp', '${videoId}')">WhatsApp</button>
-            <button onclick="copyLink('${videoId}')">Copy Link</button>
-        `;
-
         shareBtn.addEventListener("click", function (event) {
             event.stopPropagation();
-            shareOptions.style.display = (shareOptions.style.display === "block") ? "none" : "block";
-        });
-
-        document.addEventListener("click", function (e) {
-            if (!shareBtn.contains(e.target) && !shareOptions.contains(e.target)) {
-                shareOptions.style.display = "none";
-            }
+            copyLink(videoId);
         });
     }
 });
 
+// Function to Open Video in Video.js Player
 function openVideo(videoId) {
-    document.getElementById("videoModal").classList.add("active");
-    document.getElementById("videoFrame").src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    const modal = document.getElementById("videoModal");
+    modal.classList.add("active");
+
+    const player = videojs("videoPlayer");
+    player.src({ type: "video/youtube", src: `https://www.youtube.com/watch?v=${videoId}` });
+    player.play();
 }
 
+// Close Modal & Stop Video
 function closeModal() {
-    document.getElementById("videoModal").classList.remove("active");
-    document.getElementById("videoFrame").src = "";
+    const modal = document.getElementById("videoModal");
+    modal.classList.remove("active");
+
+    const player = videojs("videoPlayer");
+    player.pause();
+    player.src("");  // Reset player source
 }
 
-function shareVideo(platform, videoId) {
-    const url = `https://www.youtube.com/watch?v=${videoId}`;
-    let shareUrl = "";
-
-    switch (platform) {
-        case "facebook": shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`; break;
-        case "messenger": shareUrl = `https://www.messenger.com/t/?link=${url}`; break;
-        case "whatsapp": shareUrl = `https://wa.me/?text=${url}`; break;
-    }
-
-    window.open(shareUrl, "_blank");
-    showNotification();
+// Function to Increment View Count in Firebase
+function incrementViewCount(videoNum) {
+    const ref = db.ref(`video_views/${videoNum}`);
+    ref.transaction(currentViews => (currentViews || 0) + 1);
 }
 
+// Function to Copy Video Link
 function copyLink(videoId) {
-    navigator.clipboard.writeText(`https://www.youtube.com/watch?v=${videoId}`);
-    showNotification();
-}
-
-function showNotification() {
-    document.getElementById("notification").style.display = "block";
-    setTimeout(() => { document.getElementById("notification").style.display = "none"; }, 2000);
+    const url = `https://www.youtube.com/watch?v=${videoId}`;
+    navigator.clipboard.writeText(url).then(() => {
+        alert("Link copied successfully!");
+    });
 }
