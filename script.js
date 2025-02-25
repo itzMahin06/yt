@@ -1,7 +1,4 @@
-const videoList = {
-    1: "uawquI4pOXw",
-    2: "jdQl9bjYw0w"
-};
+
 
 document.querySelectorAll(".video-card").forEach(card => {
     const videoNum = card.getAttribute("data-video");
