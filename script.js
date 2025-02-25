@@ -18,42 +18,56 @@ const videoList = {
     2: "jdQl9bjYw0w"
 };
 
-// Load Videos & Fetch Viewer Count
+// Load Thumbnails & Fetch Viewer Count
 document.querySelectorAll(".video-card").forEach(card => {
     const videoNum = card.getAttribute("data-video");
     const videoId = videoList[videoNum];
 
     if (videoId) {
-        document.getElementById(`video-${videoNum}`).src = `https://www.youtube.com/embed/${videoId}`;
+        document.getElementById(`thumb-${videoNum}`).src = `https://img.youtube.com/vi/${videoId}/0.jpg`;
 
         // Fetch View Count from Firebase
         db.ref(`video_views/${videoNum}`).on("value", snapshot => {
             document.getElementById(`view-count-${videoNum}`).innerText = snapshot.val() || 0;
         });
 
-        // Track View Count when Clicked
-        card.addEventListener("click", function (event) {
-            if (!event.target.classList.contains("share-btn")) {
-                incrementViewCount(videoNum);
-            }
+        // Open Popup & Track View Count
+        card.querySelector(".video-thumbnail").addEventListener("click", function () {
+            openPopup(videoId);
+            incrementViewCount(videoNum);
         });
 
         // Share Button
-        const shareBtn = card.querySelector(".share-btn");
-        shareBtn.addEventListener("click", function (event) {
+        card.querySelector(".share-btn").addEventListener("click", function (event) {
             event.stopPropagation();
             copyLink(videoId);
         });
     }
 });
 
-// Function to Increment View Count in Firebase
+// Open Popup Video
+function openPopup(videoId) {
+    const popup = document.getElementById("video-popup");
+    const iframe = document.getElementById("popup-video");
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    popup.style.display = "flex";
+}
+
+// Close Popup Video
+document.getElementById("close-popup").addEventListener("click", function () {
+    const popup = document.getElementById("video-popup");
+    const iframe = document.getElementById("popup-video");
+    iframe.src = "";
+    popup.style.display = "none";
+});
+
+// Increment View Count in Firebase
 function incrementViewCount(videoNum) {
     const ref = db.ref(`video_views/${videoNum}`);
     ref.transaction(currentViews => (currentViews || 0) + 1);
 }
 
-// Function to Copy Video Link
+// Copy Video Link
 function copyLink(videoId) {
     const url = `https://www.youtube.com/watch?v=${videoId}`;
     navigator.clipboard.writeText(url).then(() => {
