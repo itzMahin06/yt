@@ -5,6 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mahin's ClassRoom</title>
     <link rel="stylesheet" href="styles.css">
+<style>
+    .link-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.link-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #222;
+    border-radius: 8px;
+    padding: 12px 15px;
+    width: 300px;
+    max-width: 100%;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.link-box:hover {
+    background: #333;
+}
+
+/* Copy Button */
+.copy-btn {
+    background: #ff0000;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.copy-btn:hover {
+    background: #cc0000;
+    transform: scale(1.05);
+}
+
+.copy-btn:active {
+    background: #b30000;
+    transform: scale(0.95);
+}
+
+/* Copy Success Notification */
+.copy-success {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: none;
+    font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .link-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+</style>
 </head>
 <body>
 
@@ -21,32 +93,42 @@
     </div>
 </div>
     <br> 
-    <div class="video-container">
-        <div class="video-card" data-video="1">
-           <div class="viewer-counter">Views: 1.4K </div>
-            <div class="share-options"></div>
-            <img id="thumb-1" src="" alt="Video Thumbnail">
-            <button class="share-btn">Share</button>
-        </div>
-        <div class="video-card" data-video="2">
-            <div class="viewer-counter">Views: 1K </div>
-            <div class="share-options"></div>
-            <img id="thumb-2" src="" alt="Video Thumbnail">
-            <button class="share-btn">Share</button>
-        </div>
+      <div class="link-container">
+    <div class="link-box" onclick="redirectTo('https://class.maahin.my.id/engineering-concept-book-suggestion-class')">
+        <span class="link-text">Engineering Concept Book Suggestion Class (Chemistry) </span>
+        <button class="copy-btn" onclick="copyLink(event, 'https://class.maahin.my.id/engineering-concept-book-suggestion-class')">Copy</button>
+    </div> 
+    <div class="link-box" onclick="redirectTo('https://class.maahin.my.id/organic-mega-class')">
+        <span class="link-text">Organic Chemistry Mega Class</span>
+        <button class="copy-btn" onclick="copyLink(event, 'https://class.maahin.my.id/organic-mega-class')">Copy</button>
     </div>
-
-    <!-- Popup Modal -->
-    <div class="modal" id="videoModal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal()">×</button>
-            <iframe id="videoFrame" src="" allowfullscreen></iframe>
-        </div>
+    <div class="link-box" onclick="redirectTo('https://class.maahin.my.id/mahin-qb-solve')">
+        <span class="link-text">Mahin's Question Bank Solve Class</span>
+        <button class="copy-btn" onclick="copyLink(event, 'https://class.maahin.my.id/mahin-qb-solve')">Copy</button>
     </div>
+</div>
 
-    <!-- Notification -->
-    <div class="notification" id="notification">Successfully Shared!</div>
+<!-- Success Message -->
+<div id="copy-success" class="copy-success">Copied Successfully!</div>
+<script>
+    // Redirect when clicking the box (except the copy button)
+function redirectTo(url) {
+    window.location.href = url;
+}
 
-    <script src="script.js"></script>
+// Copy link without triggering redirection
+function copyLink(event, link) {
+    event.stopPropagation(); // Prevents the redirect when clicking "Copy"
+    navigator.clipboard.writeText(link);
+
+    // Show success message
+    let successMsg = document.getElementById("copy-success");
+    successMsg.style.display = "block";
+
+    setTimeout(() => {
+        successMsg.style.display = "none";
+    }, 1500);
+}
+</script>
 </body>
 </html>
