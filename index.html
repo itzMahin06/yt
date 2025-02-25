@@ -3,25 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahin's Class</title>
+    <title>YouTube Video Embed</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
 </head>
 <body>
 
-    <h1>Mahin's Video Gallery</h1>
+    <h1>YouTube Video Gallery</h1>
 
     <div class="video-container">
         <div class="video-card" data-video="1">
             <div class="viewer-counter">Views: <span id="view-count-1">0</span></div>
-            <iframe id="video-1" class="youtube-video" allowfullscreen></iframe>
+            <img class="video-thumbnail" id="thumb-1" alt="Video Thumbnail">
             <button class="share-btn">Share</button>
         </div>
         <div class="video-card" data-video="2">
             <div class="viewer-counter">Views: <span id="view-count-2">0</span></div>
-            <iframe id="video-2" class="youtube-video" allowfullscreen></iframe>
+            <img class="video-thumbnail" id="thumb-2" alt="Video Thumbnail">
             <button class="share-btn">Share</button>
+        </div>
+    </div>
+
+    <div id="video-popup" class="popup">
+        <div class="popup-content">
+            <span id="close-popup">&times;</span>
+            <iframe id="popup-video" allowfullscreen></iframe>
         </div>
     </div>
 
