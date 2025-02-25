@@ -1,6 +1,5 @@
 // Firebase Configuration
 const firebaseConfig = {
-    const firebaseConfig = {
     apiKey: "AIzaSyD_-Utk2tXtvsFaSv1tFa-6YZi0d8nRWvA",
     authDomain: "mahin-class.firebaseapp.com",
     projectId: "mahin-class",
@@ -54,8 +53,11 @@ function openVideo(videoId) {
     const modal = document.getElementById("videoModal");
     modal.classList.add("active");
 
-    const player = videojs("videoPlayer");
-    player.src({ type: "video/youtube", src: `https://www.youtube.com/watch?v=${videoId}` });
+    const player = videojs("videoPlayer", {
+        techOrder: ["youtube"],
+        sources: [{ type: "video/youtube", src: `https://www.youtube.com/watch?v=${videoId}` }]
+    });
+
     player.play();
 }
 
