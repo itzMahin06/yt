@@ -306,10 +306,3 @@ h1 { margin-bottom: 20px; font-size: 2rem; }
   background-color: #176517;
 }
 
-/* Initially Hide Alert Box */
-.alert-box {
-  display: none;
-  position: fixed;
-  top: 80px;
-  right: 20px;
-}
