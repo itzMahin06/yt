@@ -151,6 +151,30 @@ function showNotification() {
     document.getElementById("notification").style.display = "block";
     setTimeout(() => { document.getElementById("notification").style.display = "none"; }, 2000);
 }
+</script> 
+<script>
+ document.addEventListener("dblclick", function () {
+  let alertBox = document.querySelector(".alert-box");
+  
+  if (!alertBox) {
+    alertBox = document.createElement("div");
+    alertBox.className = "alert-box";
+    alertBox.innerHTML = `
+      <i class="fa-solid fa-bullhorn"></i>
+      <span style="font-family: Kalpurush;"> এই ক্লাসগুলো ডেমো হিসেবে রাখা হয়েছে।  </span>
+      <button class="close-btn">&times;</button>
+    `;
+    document.body.appendChild(alertBox);
+
+    alertBox.querySelector(".close-btn").addEventListener("click", function () {
+      alertBox.style.display = "none";
+    });
+  } else {
+    alertBox.style.display = "flex";
+  }
+});
+
 </script>
+    
 </body>
 </html>
