@@ -69,3 +69,7 @@ function showNotification() {
     document.getElementById("notification").style.display = "block";
     setTimeout(() => { document.getElementById("notification").style.display = "none"; }, 2000);
 }
+
+document.querySelector(".close-btn").addEventListener("click", function () {
+  document.querySelector(".alert-box").style.display = "none";
+});
