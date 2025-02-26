@@ -22,8 +22,11 @@
     </div>
 </div>
     <br> 
-    <div class="channel-info">
+    <div class="alert-box">
+  <i class="fa-solid fa-bullhorn"></i>
         <span style="font-family:Kalpurush;"> রসায়ন ২য় পত্রের জৈব রসায়নের মেগা ক্লাস। প্রতিটা ক্লাস ৫ঘন্টা+ সময় নিয়ে বেসিক সহকারে করানো হয়েছে। ক্লাস নিয়েছেনঃ শাহীন ভাইয়া, বুয়েট। </span>
+          <button class="close-btn">&times;</button>
+
     </div>
     <br>
     <h2> Class Information </h2>
@@ -181,5 +184,10 @@ function showNotification() {
     setTimeout(() => { document.getElementById("notification").style.display = "none"; }, 2000);
 }
     </script>
+<script>
+    document.querySelector(".close-btn").addEventListener("click", function () {
+  document.querySelector(".alert-box").style.display = "none";
+});
+</script>    
 </body>
 </html>
