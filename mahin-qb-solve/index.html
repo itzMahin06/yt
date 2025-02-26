@@ -16,9 +16,9 @@
 </div>
 
 <!-- Alert Box -->
-<div class="alert-box">
+<div class="alert-box2">
   <i class="fa-solid fa-bullhorn"></i>
-  <span> কৃষি+গুচ্ছের সমস্ত ক্লাস ০১-০৩-২০২৫ তারিখে প্রকাশিত হবে। </span>
+  <span style="font-family: Kalpurush;"> কৃষি+গুচ্ছের সমস্ত ক্লাস ০১-০৩-২০২৫ তারিখে প্রকাশিত হবে। </span>
   <button class="close-btn">&times;</button>
 </div>
     <div class="channel-info">
@@ -187,15 +187,13 @@ function showNotification() {
 
     // Function to show alert box
 function showAlert() {
-  let alertBox = document.querySelector(".alert-box");
+  let alertBox = document.querySelector(".alert-box2");
   alertBox.style.display = "flex";
 }
 
 // Show alert on bell click
 document.querySelector(".notification-bell").addEventListener("click", showAlert);
 
-// Show alert on double click anywhere
-document.addEventListener("dblclick", showAlert);
 
 // Hide alert when close button is clicked
 document.querySelector(".close-btn").addEventListener("click", function () {
