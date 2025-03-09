@@ -74,14 +74,12 @@
     
     <div class="comment-section">
         <h2>Comments</h2>
-        <div class="comments-list" id="comments-list"></div>
-
-        <textarea id="comment-input" placeholder="Write your comment..." maxlength="200"></textarea>
-        <button id="submit-comment">Post Comment</button>
+        <div class="fb-comments" data-href="https://class.maahin.my.id/agri-organic" data-width="" data-numposts="5"></div>
     </div>
  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
-    
+    <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0"></script>
     <script src="script.js"></script>
 <script>
   const videoList = {
