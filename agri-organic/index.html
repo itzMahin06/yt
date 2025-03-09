@@ -6,6 +6,9 @@
     <title>Mahin's ClassRoom</title>
     <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+ <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
+
 </head>
 <body>
 
@@ -57,6 +60,7 @@
       
     </div>
 
+    
     <!-- Popup Modal -->
     <div class="modal" id="videoModal">
         <div class="modal-content">
@@ -66,8 +70,18 @@
     </div>
 
     <!-- Notification -->
-    <div class="notification" id="notification">Successfully Shared!</div>
+    <div class="notification" id="notification">Successfully Shared!</div>  
+    
+    <div class="comment-section">
+        <h2>Comments</h2>
+        <div class="comments-list" id="comments-list"></div>
 
+        <textarea id="comment-input" placeholder="Write your comment..." maxlength="200"></textarea>
+        <button id="submit-comment">Post Comment</button>
+    </div>
+ <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
+    
     <script src="script.js"></script>
 <script>
   const videoList = {
@@ -145,6 +159,55 @@ function showNotification() {
     document.getElementById("notification").style.display = "block";
     setTimeout(() => { document.getElementById("notification").style.display = "none"; }, 2000);
 }
+
+// Replace with your Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyD_-Utk2tXtvsFaSv1tFa-6YZi0d8nRWvA",
+  authDomain: "mahin-class.firebaseapp.com",
+  databaseURL: "https://mahin-class-default-rtdb.firebaseio.com",
+  projectId: "mahin-class",
+  storageBucket: "mahin-class.firebasestorage.app",
+  messagingSenderId: "1044302797960",
+  appId: "1:1044302797960:web:3a39774ca5e890f827133d"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// DOM Elements
+const commentInput = document.getElementById("comment-input");
+const submitBtn = document.getElementById("submit-comment");
+const commentsList = document.getElementById("comments-list");
+
+// Function to Submit Comment
+submitBtn.addEventListener("click", () => {
+    const commentText = commentInput.value.trim();
+    if (commentText.length === 0) {
+        alert("Comment cannot be empty!");
+        return;
+    }
+
+    db.collection("comments").add({
+        text: commentText,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+        commentInput.value = "";
+    }).catch(error => console.error("Error adding comment: ", error));
+});
+
+// Function to Display Comments
+db.collection("comments").orderBy("timestamp", "desc").onSnapshot(snapshot => {
+    commentsList.innerHTML = "";
+    snapshot.forEach(doc => {
+        const commentData = doc.data();
+        const commentElement = document.createElement("div");
+        commentElement.classList.add("comment");
+        commentElement.innerText = commentData.text;
+        commentsList.appendChild(commentElement);
+    });
+});
+    
 </script>
 </body>
 </html>
